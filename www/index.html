@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
+    	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    	<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <title>Hello World</title>
+    </head>
+    <body>
+		<div data-role="panel" id="panel-1">
+			<ul data-role="listview" id="listview-1">
+				<li><a href="#page-1">New Contact</a></li>
+				<li><a href="#e_contacts">Enterprise Contacts</a></li>
+				<li><a href="#page-3">Device Contacts</a></li>
+			</ul>
+		</div>
+		<div data-role="page" id="page-1">
+			<div data-role="header">
+				<a href="#panel-1" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<h1>New Contact</h1>
+			</div>
+			<form name="reg" id="reg" data-ajax="false">
+				 <fieldset>
+					<div data-role="content">
+						<div class="ui-field-contain">
+							<input name="firstName" id="firstName" data-clear-btn="true" value="" placeholder="First Name" type="text"/>
+							<input name="lastName" id="lastName" data-clear-btn="true" value="" placeholder="Last Name" type="text"/>
+						</div>
+						<div class="ui-field-contain">
+							<input name="city" id="city" data-clear-btn="true" value="" placeholder="City" type="text"/>
+							<input name="state" id="state" data-clear-btn="true" value="" placeholder="State" type="text"/>
+						</div>
+						<div class="ui-field-contain">
+							<input name="email" id="email" data-clear-btn="true" value="" placeholder="Email" type="email"/>
+							<input name="contactPhone" id="contactPhone" data-clear-btn="true" value="" placeholder="Phone" type="tel"/>
+						</div>
+						<div class="ui-field-contain">
+							<label for="birth_day">Birth Day</label>
+							<input name="birth_day" id="birth_day" data-clear-btn="true" value="" type="date"/>
+						</div>
+						<div id="formMsgs">Form Messages</div>
+						<div class="ui-grid-a app-responsive">
+			                <div class="ui-block-a"><input type="submit" id="register" value="Add" data-theme="b"/></div>
+			                <div class="ui-block-b"><input type="button" name="cancel" id="cancel" value="Reset"/></div>
+			            </div>
+					</div>
+				</fieldset>
+			</form>
+			<div data-role="footer">
+				<h4>New Contact</h4>
+			</div>
+		</div>
+		<div data-role="page" id="e_contacts">
+			<div data-role="header">
+				<a href="#panel-1" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<h1>Enterprise Contacts</h1>
+			</div>
+			<div data-role="content">
+				<ul data-role="listview" id="e_contacts_list">
+					<li>Item 1</li>
+					<li>Item 2</li>
+					<li>Item 3</li>
+				</ul> 
+			</div>
+			<div data-role="footer">
+				<h4>Enterprise Contacts</h4>
+			</div>
+		</div>
+		<div data-role="page" id="page-3">
+			<div data-role="header">
+				<a href="#panel-1" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<h1>Device Contacts</h1>
+			</div>
+			<div data-role="content">
+				<a href="" id="btnDeviceContacts" class="ui-btn ui-corner-all">Fetch Contacts</a>
+				<div id="debug"></div>
+				<p>
+					<form class="ui-filterable">
+						<input data-type="search" id="searchForListview-1"/>
+					</form>
+					<ul data-role="listview" id="deviceContacts" data-filter="true" data-input="#searchForListview-1">
+						<li>Item 1</li>
+						<li>Item 2</li>
+						<li>Item 3</li>
+					</ul> 
+			</div>
+		</div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
