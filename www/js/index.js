@@ -1,4 +1,19 @@
-
+$.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+    
 var app = {
     // Application Constructor
     initialize: function() {
@@ -28,21 +43,6 @@ var app = {
 	onContactsError: function() {
 	   $("#debug").html("error...");
 	},
-	serializeObject: function() {
-        var o = {};
-        var a = this.serializeArray();
-        $.each(a, function() {
-            if (o[this.name]) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-        return o;
-    },
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
@@ -55,34 +55,49 @@ var app = {
     	console.log("StatusBar: " + StatusBar.isVisible);
     	
     	//Register an event listener on the submit action
-        $('#reg').submit(function(event) {
-            event.preventDefault();
+        $('#postForm').submit(function(event) {
+        	event.preventDefault();
 
-            var memberData = $(this).serializeObject();
-
-            //registerMember(memberData);
-            console.log("memberData = '" + memberData + "'");
-            console.log("#reg = '" + $(this) + "'");
+            var contactForm = $(this).serializeObject();//$(this).serialize();
+            console.log("contactForm = '" + contactForm + "'");
+            
+        	app.postContact(contactForm);
         });
         
-    	$.getJSON("http://10.127.91.38:8080/ETAPP-REST-1/contacts/", function(data) {
-    	//$.getJSON("http://10.127.91.38:8080/ETAPP-REST-1/contacts/550803562d0eaa6bea7c31d8", function(data) {
-    	    $("#e_contacts_list").empty();
+        // Get ENTERPRISE Contacts
+    	$.getJSON("http://10.127.91.42:8080/ETAPP-REST-1/contacts/", function(data) {
+    	//$.getJSON("http://10.127.91.42:8080/ETAPP-REST-1/contacts/550803562d0eaa6bea7c31d8", function(data) {
+    	    $("#enterprise_contacts_list").empty();
     	    var items = [];
+    	    var contactItem = "";
+    	    var contactImage = "";
     	    $.each(data, function(key, val) {
     	    //$.each([data], function(key, val) {
-    	       //console.log("item: " + key + " " + val.firstName);
-    	       items.push("<li><a href='#"+ key + "'>" + val.firstName +" " + val.lastName + "</a></li>");
+    	       console.log("item: " + key + " " + val.firstName);
+    	       //items.push("<li><a href='#"+ key + "'>" + val.firstName +" " + val.lastName + "</a></li>");
+    	       /*
+    	       $.each(val, function(key2, val2) {
+    	    	   contactForm += "<li>" + key2 + ": " + val2 + "</li>";
+    	       });*/ 
+    	       contactImage = '<img src="img/mugshots/' + val.id + '.jpg" alt="CSS"/>';
+    	       //contactItem = "<li><a href='#"+ key + "'>" + val.firstName +" " + val.lastName + contactForm + "</a></li>"; 
+    	       //contactItem = '<li><a href="#update_contact_page">' + val.firstName + ' ' + val.lastName + '</a></li>'; 
+    	       contactItem = '<li><a href="#update_contact_page">' + contactImage + val.firstName + '<br/>' + val.lastName + '</a></li>'; 
+    	       items.push(contactItem);
+    	    
+    	       //console.log("contactItem: " + contactItem);
     	    });
-    	    $("#e_contacts_list").append(items);
-    	    $("#e_contacts_list").listview("refresh");
+    	    items.push('<li data-role="list-divider">List Divider</li>');
+    	    $("#enterprise_contacts_list").append(items);
+    	    $("#enterprise_contacts_list").listview("refresh");
     	});
-    	//http://10.127.91.38:8080/ETAPP-REST-1/contacts/
+    	//http://10.127.91.42:8080/ETAPP-REST-1/contacts/
     	//http://localhost:8080/mobile-rest/rest/members
-    	//http://mobile-html5.rhcloud.com/rest/members
-    	//http://192.168.1.156:8080/mobile-rest/rest/members
     	
-    	$("#btnDeviceContacts").on("click", function(e) {
+    	    	
+    	// Get DEVICE Contacts
+    	/*
+    	 $("#btnDeviceContacts").on("click", function(e) {
     		  console.log("button clicked, going to fetch local contacts");
     		  $("#debug").html("finding...");
     		  var options      = new ContactFindOptions();
@@ -90,6 +105,7 @@ var app = {
     		  var fields       = ["displayName", "name"];
     		  navigator.contacts.find(fields, app.onContactsSuccess, app.onContactsError, options);
     	});
+    	*/
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -107,30 +123,43 @@ var app = {
     the refresh the member table, or process JAX-RS response codes to update
     the validation errors.
      */
-    registerMember: function(memberData) {
+    postContact: function(contactForm) {
         //clear existing  msgs
         $('span.invalid').remove();
         $('span.success').remove();
 
         // Display the loader widget
-        //$.mobile.loading("show");
+        $.mobile.loading("show");
 
+        console.log("contactForm = " + contactForm);
+        //var contactData = JSON.stringify(contactForm.serializeArray());
+        var contactData = JSON.stringify(contactForm);
+    	//console.log("JSON.stringify(contactForm) = " + JSON.stringify(contactForm));
+    	console.log("contactData = " + contactData);
+    	
+    	/*
+    	 * var frm = $(document.myform);
+ var data = JSON.stringify(frm.serializeArray());
+    	 */
+    	
         $.ajax({
-            url: 'http://10.127.91.38:8080/ETAPP-REST-1/contacts',
-            contentType: "application/json",
-            dataType: "json",
-            type: "POST",
-            data: JSON.stringify(memberData),
+            url: 'http://10.127.91.42:8080/ETAPP-REST-1/contacts',
+            contentType: 'application/json',
+            dataType: 'text', //'json',
+            type: 'post',
+            async: 'true',
+            data:  contactData, //'{"firstName": "caca2", "lastName": "fritas"}',
+            
             success: function(data) {
-                console.log("Member registered");
+                console.log("Contact Added");
 
                 //clear input fields
-                $('#reg')[0].reset();
-
+                $('#postForm')[0].reset();
+ 
                 //mark success on the registration form
-                $('#formMsgs').append($('<span class="success">Member Registered</span>'));
+                $('#formMsgs').append($('<span class="success">Contact Added</span>'));
 
-                updateMemberTable();
+                //updateMemberTable();
             },
             error: function(error) {
                 if ((error.status == 409) || (error.status == 400)) {
@@ -142,14 +171,17 @@ var app = {
                         $('<span class="invalid">' + val + '</span>').insertAfter($('#' + index));
                     });
                 } else {
-                    //console.log("error - unknown server issue");
-                    $('#formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+                    //console.log("error: " + error.responseText + " - unknown server issue");
+                    console.log("error: " + error.status + " - unknown server issue");
+                    
+                    $('#formMsgs').append($('<span class="invalid">'+ error.responseText + '</span>'));
                 }
             },
             complete: function() {
                 // Hide the loader widget
                 $.mobile.loading("hide");
             }
+            
         });
     }
 };
