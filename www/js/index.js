@@ -52,49 +52,75 @@ var app = {
         //app.receivedEvent('deviceready');
     	 
     	// Store object
-    	var storeObject = {
-    		id				: '',
-    	    firstName		: '',
-    	    lastName		: '',
-    	    city			: '',
-    	    state			: '',
-    	    email			: '',
-    	    contactPhone	: ''
+    	var listObject = {
+    		id				: null,
+    	    firstName		: null,
+    	    lastName		: null,
+    	    city			: null,
+    	    state			: null,
+    	    email			: null,
+    	    contactPhone	: null
     	}
     	
+    	/*
     	var listObject = {
     			itemID : null
-		}
-
-    	/*
+		}*/
+		
     	$(document).on('pagebeforeshow', '#contact_details_page', function(){       
-    	    $('#contact_details_page [data-role="content"]').html('You have selected Link' + listObject.itemID);
+    		console.log("Just hit the contact_details_page");
+    	    //$('#contact_details_page [data-role="content"]').html('You have selected ' + listObject.city);
+    		var page = $("#contact_details_page");
+    		//page.find("img").attr('src').null;//"img/mugshots/" + listObject.id + ".jpg"; 
+    		page.find('img').attr('src', 'img/mugshots/' + listObject.id + '.jpg');
+    		page.find( "span[name='firstName']" ).html(listObject.firstName);
+    		page.find( "span[name='lastName']" ).html(listObject.lastName);
+    		page.find( "span[name='city']" ).html(listObject.city);
+    		page.find( "span[name='state']" ).html(listObject.state);
+    		page.find( "span[name='contactPhone']" ).html(listObject.contactPhone);
+    		//console.log("firstName = '" + page.find( "span[name='firstName']" ).text() + "'");
+    		
     	});
     	
     	$(document).on('pagebeforeshow', '#enterprise_contacts_list_page', function(){
     		
     		console.log("entering #enterprise_contacts_list_page");
+    		
     	    $('#enterprise_contacts_listview li a').each(function(){
     	        var elementID = $(this).attr('id');      
     	        console.log("elementID = '" + elementID + "'");
+    	        var hForm = $("#" +elementID + "HiddenForm");
+    	        //var fn = hForm.find( "input[name='firstName']" ).val();
+    	        //console.log("first name = '" + fn + "'");
+    	        
     	        $(document).on('click', '#'+elementID, function(event){  
     	            if(event.handled !== true) // This will prevent event triggering more then once
     	            {
     	                listObject.itemID = elementID; // Save li id into an object, localstorage can also be used, find more about it here: http://stackoverflow.com/questions/14468659/jquery-mobile-document-ready-vs-page-events
+    	                
+    	                listObject.id = hForm.find( "input[name='id']" ).val();
+    	                listObject.firstName = hForm.find( "input[name='firstName']" ).val();
+    	                listObject.lastName = hForm.find( "input[name='lastName']" ).val();
+    	                listObject.city = hForm.find( "input[name='city']" ).val(); 
+    	                listObject.state = hForm.find( "input[name='state']" ).val(); 
+    	                listObject.email = hForm.find( "input[name='email']" ).val();
+    	                listObject.contactPhone = hForm.find( "input[name='contactPhone']" ).val(); 
+    	                
     	                $.mobile.changePage( "#contact_details_page", { transition: "slide"} );
     	                event.handled = true;
     	            }              
     	        });
     	    });
-    	});
-    	*/
+    	    
+    	}); 
     	
+    	/*
     	$(document).on('pagebeforeshow', '#contact_details_page', function(e, data){     
     		//alert("My name is " + data.prevPage.find('#mugshot').val());
     		//console.log("My name is " + storeObject.firstName + " " + storeObject.city);
     		//alert("Just hit the contact_details_page");
-    		console.log("Just hit the contact_details_page");
     	});
+    	*/
     	
     	//console.log("StatusBar: " + StatusBar.isVisible);
     	StatusBar.hide();
@@ -117,21 +143,32 @@ var app = {
     	    var items = [];
     	    var contactItem = "";
     	    var contactImage = "";
+    	    var contactForm = null;
+    	    
     	    $.each(contacts, function(index, contact) {
     	       //console.log("item: " + index + " " + contact.firstName + " city: " + contact.city);
-    	       //items.push("<li><a href='#"+ index + "'>" + contact.firstName +" " + contact.lastName + "</a></li>");
-    	       /*
-    	       $.each(contact, function(index2, contactField) {
-    	    	   contactForm += "<li>" + index2 + ": " + contactField + "</li>";
-    	       });*/ 
-    	        
+    	       
+    	    	// Hidden Contact Form
+    	       contactForm = '<form id="' + contact.id + 'HiddenForm" data-ajax="false">';
+    	       $.each(contact, function(field, value) {
+    	    	   contactForm += '<input type="hidden" name="' + field + '" value="' + value + '"/>';
+    	    	   //console.log("field = '" + field + "' value = '" + value + "'");
+    	       });
+    	       contactForm += '</form>';
+    	       
+    	       // Contact Image
     	       contactImage = '<img id="mugshot" src="img/mugshots/' + contact.id + '.jpg" alt="CSS"/>';
-    	       //contactItem = "<li><a href='#"+ index + "'>" + contact.firstName +" " + contact.lastName + contactForm + "</a></li>"; 
-    	       //contactItem = '<li><a href="#update_contact_page">' + contact.firstName + ' ' + contact.lastName + '</a></li>'; 
-    	       contactItem = '<li><a href="#" id="' + contact.id + '">' + contactImage + contact.firstName + '<br/>' + contact.lastName + '</a></li>'; 
+    	   
+    	       // Contact List Item: link, image, name & hidden form
+    	       contactItem = '<li>';
+    	       contactItem += '<a href="#" id="' + contact.id + '">';
+    	       contactItem += contactImage + contact.firstName + '<br/>' + contact.lastName + contactForm;
+    	       contactItem += '</a>';
+    	       contactItem += '</li>'; 
     	       items.push(contactItem);
     	    
-    	       //console.log("contactItem: " + contactItem);
+    	       console.log("contactItem = '" + contactItem + "'");
+    	    
     	    });
     	    items.push('<li data-role="list-divider">List Divider</li>');
     	    $("#enterprise_contacts_listview").append(items);
