@@ -15,6 +15,7 @@ $.fn.serializeObject = function() {
     };
     
 var app = {
+		
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -31,8 +32,8 @@ var app = {
     	$("#deviceContacts").empty();
     	var items = [];
     	for (var i = 0; i < contacts.length; i++) {
-    		console.log("displayName = '" + contacts[i].displayName + "'");
-    		console.log("name.formatted = '" + contacts[i].name.formatted + "'");
+    		//console.log("displayName = '" + contacts[i].displayName + "'");
+    		//console.log("name.formatted = '" + contacts[i].name.formatted + "'");
     		if (contacts[i].name.formatted) {
     			items.push("<li>" + contacts[i].name.formatted + "</li>");
     		}
@@ -49,47 +50,92 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         //app.receivedEvent('deviceready');
+    	 
+    	// Store object
+    	var storeObject = {
+    		id				: '',
+    	    firstName		: '',
+    	    lastName		: '',
+    	    city			: '',
+    	    state			: '',
+    	    email			: '',
+    	    contactPhone	: ''
+    	}
     	
-    	console.log("StatusBar: " + StatusBar.isVisible);
+    	var listObject = {
+    			itemID : null
+		}
+
+    	/*
+    	$(document).on('pagebeforeshow', '#contact_details_page', function(){       
+    	    $('#contact_details_page [data-role="content"]').html('You have selected Link' + listObject.itemID);
+    	});
+    	
+    	$(document).on('pagebeforeshow', '#enterprise_contacts_list_page', function(){
+    		
+    		console.log("entering #enterprise_contacts_list_page");
+    	    $('#enterprise_contacts_listview li a').each(function(){
+    	        var elementID = $(this).attr('id');      
+    	        console.log("elementID = '" + elementID + "'");
+    	        $(document).on('click', '#'+elementID, function(event){  
+    	            if(event.handled !== true) // This will prevent event triggering more then once
+    	            {
+    	                listObject.itemID = elementID; // Save li id into an object, localstorage can also be used, find more about it here: http://stackoverflow.com/questions/14468659/jquery-mobile-document-ready-vs-page-events
+    	                $.mobile.changePage( "#contact_details_page", { transition: "slide"} );
+    	                event.handled = true;
+    	            }              
+    	        });
+    	    });
+    	});
+    	*/
+    	
+    	$(document).on('pagebeforeshow', '#contact_details_page', function(e, data){     
+    		//alert("My name is " + data.prevPage.find('#mugshot').val());
+    		//console.log("My name is " + storeObject.firstName + " " + storeObject.city);
+    		//alert("Just hit the contact_details_page");
+    		console.log("Just hit the contact_details_page");
+    	});
+    	
+    	//console.log("StatusBar: " + StatusBar.isVisible);
     	StatusBar.hide();
-    	console.log("StatusBar: " + StatusBar.isVisible);
-    	
+    	//console.log("StatusBar: " + StatusBar.isVisible);
+      
     	//Register an event listener on the submit action
         $('#postForm').submit(function(event) {
         	event.preventDefault();
 
-            var contactForm = $(this).serializeObject();//$(this).serialize();
-            console.log("contactForm = '" + contactForm + "'");
-            
+            var contactForm = $(this).serializeObject();
+            //console.log("contactForm = '" + contactForm + "'");
+             
         	app.postContact(contactForm);
         });
         
         // Get ENTERPRISE Contacts
-    	$.getJSON("http://10.127.91.42:8080/ETAPP-REST-1/contacts/", function(data) {
+    	$.getJSON("http://10.127.91.42:8080/ETAPP-REST-1/contacts/", function(contacts) {
     	//$.getJSON("http://10.127.91.42:8080/ETAPP-REST-1/contacts/550803562d0eaa6bea7c31d8", function(data) {
-    	    $("#enterprise_contacts_list").empty();
+    	    $("#enterprise_contacts_listview").empty();
     	    var items = [];
     	    var contactItem = "";
     	    var contactImage = "";
-    	    $.each(data, function(key, val) {
-    	    //$.each([data], function(key, val) {
-    	       console.log("item: " + key + " " + val.firstName);
-    	       //items.push("<li><a href='#"+ key + "'>" + val.firstName +" " + val.lastName + "</a></li>");
+    	    $.each(contacts, function(index, contact) {
+    	       //console.log("item: " + index + " " + contact.firstName + " city: " + contact.city);
+    	       //items.push("<li><a href='#"+ index + "'>" + contact.firstName +" " + contact.lastName + "</a></li>");
     	       /*
-    	       $.each(val, function(key2, val2) {
-    	    	   contactForm += "<li>" + key2 + ": " + val2 + "</li>";
+    	       $.each(contact, function(index2, contactField) {
+    	    	   contactForm += "<li>" + index2 + ": " + contactField + "</li>";
     	       });*/ 
-    	       contactImage = '<img src="img/mugshots/' + val.id + '.jpg" alt="CSS"/>';
-    	       //contactItem = "<li><a href='#"+ key + "'>" + val.firstName +" " + val.lastName + contactForm + "</a></li>"; 
-    	       //contactItem = '<li><a href="#update_contact_page">' + val.firstName + ' ' + val.lastName + '</a></li>'; 
-    	       contactItem = '<li><a href="#update_contact_page">' + contactImage + val.firstName + '<br/>' + val.lastName + '</a></li>'; 
+    	        
+    	       contactImage = '<img id="mugshot" src="img/mugshots/' + contact.id + '.jpg" alt="CSS"/>';
+    	       //contactItem = "<li><a href='#"+ index + "'>" + contact.firstName +" " + contact.lastName + contactForm + "</a></li>"; 
+    	       //contactItem = '<li><a href="#update_contact_page">' + contact.firstName + ' ' + contact.lastName + '</a></li>'; 
+    	       contactItem = '<li><a href="#" id="' + contact.id + '">' + contactImage + contact.firstName + '<br/>' + contact.lastName + '</a></li>'; 
     	       items.push(contactItem);
     	    
     	       //console.log("contactItem: " + contactItem);
     	    });
     	    items.push('<li data-role="list-divider">List Divider</li>');
-    	    $("#enterprise_contacts_list").append(items);
-    	    $("#enterprise_contacts_list").listview("refresh");
+    	    $("#enterprise_contacts_listview").append(items);
+    	    $("#enterprise_contacts_listview").listview("refresh");
     	});
     	//http://10.127.91.42:8080/ETAPP-REST-1/contacts/
     	//http://localhost:8080/mobile-rest/rest/members
@@ -131,11 +177,11 @@ var app = {
         // Display the loader widget
         $.mobile.loading("show");
 
-        console.log("contactForm = " + contactForm);
+        //console.log("contactForm = " + contactForm);
         //var contactData = JSON.stringify(contactForm.serializeArray());
         var contactData = JSON.stringify(contactForm);
     	//console.log("JSON.stringify(contactForm) = " + JSON.stringify(contactForm));
-    	console.log("contactData = " + contactData);
+    	//console.log("contactData = " + contactData);
     	
     	/*
     	 * var frm = $(document.myform);

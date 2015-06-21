@@ -11,18 +11,54 @@
         <title>Hello World</title>
     </head>
     <body>
-		<div data-role="panel" id="panel-1">
+		
+		<!----------------------------------  Panel: Contact Details ----------------------------------------->
+		<div data-role="panel" id="main-menu-panel">
+		
 			<ul data-role="listview" id="listview-1">
 				<li><a href="#new_contact_page">New Contact</a></li>
-				<li><a href="#enterprise_contacts_page">Enterprise Contacts</a></li>
+				<li><a href="#enterprise_contacts_list_page">Enterprise Contacts</a></li>
 				<!-- Device Contacts
 				<li><a href="#page-3">Device Contacts</a></li>
 				-->
 			</ul>
 		</div>
+		
+		<!----------------------------------  PAGE: Contact Details ----------------------------------------->
+		
+		<div data-role="page" id="contact_details_page">
+			<div data-role="header">
+				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<h1>Contact Details</h1>
+			</div>
+				<div data-role="content">
+					<div class="ui-field-contain">
+						<img id="mugshot" alt="mugshot" src="img/mugshots/55866362e4b0641b3c28940c.jpg" width="100%"/>
+						<span name="firstName" id="firstName">Rene</span>
+						<span name="lastName" id="lastName">Vogt-Lowell</span>
+					</div>
+					<div class="ui-field-contain">
+						<span name="city" id="city">Dayton</span>
+						<span name="state" id="state">Ohio</span>
+					</div>
+					<div class="ui-field-contain">
+						<span name="email" id="email">rene@vogt-lowell.com</span><br/>
+						<span name="contactPhone" id="contactPhone">937.223.2332</span>
+					</div>
+					<div class="ui-grid-a app-responsive ui-field-contain">
+						<a href="" id="editButton" class="ui-btn ui-icon-edit ui-btn-icon-left ui-corner-all ui-btn-a">Edit</a>
+		            </div>
+				</div>
+			<div data-role="footer">
+				<h4>Contact Details</h4>
+			</div>
+		</div>
+		
+		<!----------------------------------  PAGE: New Contact ----------------------------------------->
+		
 		<div data-role="page" id="new_contact_page">
 			<div data-role="header">
-				<a href="#panel-1" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
 				<h1>New Contact</h1>
 			</div>
 			<form name="postForm" id="postForm" data-ajax="false">
@@ -58,9 +94,12 @@
 				<h4>New Contact</h4>
 			</div>
 		</div>
+		
+		<!----------------------------------  PAGE: Update Contact ----------------------------------------->
+		
 		<div data-role="page" id="update_contact_page">
 			<div data-role="header">
-				<a href="#panel-1" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
 				<h1>Update Contact</h1>
 			</div>
 			<form name="putForm" id="putForm" method="post"  data-ajax="false">
@@ -90,13 +129,16 @@
 				<h4>Update Contact</h4>
 			</div>
 		</div>
-		<div data-role="page" id="enterprise_contacts_page">
+		
+		<!----------------------------------  PAGE: Enterprise Contacts List ----------------------------------------->
+		
+		<div data-role="page" id="enterprise_contacts_list_page">
 			<div data-role="header">
-				<a href="#panel-1" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
 				<h1>Contacts</h1>
 			</div>
 			<div data-role="content">
-				<ul data-role="listview" data-inset="true" id="enterprise_contacts_list" data-filter="true" data-theme="a">
+				<ul data-role="listview" data-inset="true" id="enterprise_contacts_listview" data-filter="true" data-theme="a">
 					<li><h3><a href="#">Item 1</a></h3>
 						<p>Select the item you like the most</p>
 						<ul>
@@ -116,10 +158,13 @@
 				<h4>Enterprise Contacts</h4>
 			</div>
 		</div>
-		<!-- Device Contacts
-		<div data-role="page" id="page-3">
+		
+		<!----------------------------------  PAGE: Device Contacts List ----------------------------------------->
+		 
+		<!--
+		<div data-role="page" id="device_contacts_list_page">
 			<div data-role="header">
-				<a href="#panel-1" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
 				<h1>Device Contacts</h1>
 			</div>
 			<div data-role="content">
@@ -137,6 +182,7 @@
 			</div>
 		</div>
 		 -->
+		 
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
