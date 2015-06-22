@@ -16,10 +16,10 @@
 		<div data-role="panel" id="main-menu-panel">
 		
 			<ul data-role="listview" id="listview-1">
-				<li><a href="#new_contact_page">New Contact</a></li>
-				<li><a href="#enterprise_contacts_list_page">Enterprise Contacts</a></li>
+				<li><a href="#new_contact_page" data-transition="slide">New Contact</a></li>
+				<li><a href="#enterprise_contacts_list_page" data-transition="slide">Enterprise Contacts</a></li>
 				<!-- Device Contacts
-				<li><a href="#page-3">Device Contacts</a></li>
+				<li><a href="#device_contacts_list_page" data-transition="slide">Device Contacts</a></li>
 				-->
 			</ul>
 		</div>
@@ -28,7 +28,10 @@
 		
 		<div data-role="page" id="contact_details_page">
 			<div data-role="header">
-				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a 	href="#enterprise_contacts_list_page"
+					id="button-1"
+					class="ui-btn ui-icon-back ui-btn-icon-notext ui-corner-all"
+					data-transition="slide" data-direction="reverse"></a>
 				<h1>Contact Details</h1>
 			</div>
 				<div data-role="content">
@@ -42,11 +45,16 @@
 						<span name="state" id="state">Ohio</span>
 					</div>
 					<div class="ui-field-contain">
-						<span name="email" id="email">rene@vogt-lowell.com</span><br/>
+						<span name="email" id="email">rene@vogt-lowell.com</span><br/><br/>
 						<span name="contactPhone" id="contactPhone">937.223.2332</span>
 					</div>
 					<div class="ui-grid-a app-responsive ui-field-contain">
-						<a href="" id="editButton" class="ui-btn ui-icon-edit ui-btn-icon-left ui-corner-all ui-btn-a">Edit</a>
+						<div class="ui-block-a">
+							<a href="" id="editButton" class="ui-btn ui-icon-edit ui-btn-icon-left ui-corner-all ui-btn-a">Edit</a>
+						</div>
+						<div class="ui-block-b">
+							<a href="" id="deleteButton" class="ui-btn ui-icon-delete ui-btn-icon-left ui-corner-all ui-btn-a">Delete</a>
+						</div>
 		            </div>
 				</div>
 			<div data-role="footer">
@@ -54,11 +62,14 @@
 			</div>
 		</div>
 		
-		<!----------------------------------  PAGE: New Contact ----------------------------------------->
+		<!----------------------------------  PAGE: Add Contact ----------------------------------------->
 		
 		<div data-role="page" id="new_contact_page">
 			<div data-role="header">
-				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a 	href="#main-menu-panel"
+					id="button-1"
+					class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"
+					data-transition="slide" data-direction="reverse"></a>
 				<h1>New Contact</h1>
 			</div>
 			<form name="postForm" id="postForm" data-ajax="false">
@@ -76,16 +87,10 @@
 							<input name="email" id="email" data-clear-btn="true" value="" placeholder="Email" type="email"/>
 							<input name="contactPhone" id="contactPhone" data-clear-btn="true" value="" placeholder="Phone" type="tel"/>
 						</div>
-						<!-- 
-						 <div class="ui-field-contain">
-							<label for="birth_day">Birth Day</label>
-							<input name="birth_day" id="birth_day" data-clear-btn="true" value="" type="date"/>
-						</div>
-						 -->
 						<div id="formMsgs"></div>
 						<div class="ui-grid-a app-responsive ui-field-contain">
-			                <div class="ui-block-a"><input type="submit" id="newSubmit" value="Add" data-theme="b"/></div>
-			                <div class="ui-block-b"><input type="button" name="cancel" id="cancel" value="Reset"/></div>
+			                <div class="ui-block-a">&nbsp;</div>
+			                <div class="ui-block-b"><input type="submit" id="newSubmit" value="Add" data-theme="b"/></div>
 			            </div>
 					</div>
 				</fieldset>
@@ -99,8 +104,12 @@
 		
 		<div data-role="page" id="update_contact_page">
 			<div data-role="header">
-				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
-				<h1>Update Contact</h1>
+				<a 	href="#main-menu-panel"
+					id="button-1"
+					class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"
+					data-transition="slide" data-direction="reverse"></a>
+				<h1>
+				Update Contact</h1>
 			</div>
 			<form name="putForm" id="putForm" method="post"  data-ajax="false">
 				 <fieldset>
@@ -134,7 +143,10 @@
 		
 		<div data-role="page" id="enterprise_contacts_list_page">
 			<div data-role="header">
-				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a 	href="#main-menu-panel"
+					id="button-1"
+					class="ui-btn ui-icon-bars ui-btn-icon-notext ui-corner-all"
+					data-transition="slide" data-direction="reverse"></a>
 				<h1>Contacts</h1>
 			</div>
 			<div data-role="content">
@@ -164,7 +176,7 @@
 		<!--
 		<div data-role="page" id="device_contacts_list_page">
 			<div data-role="header">
-				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all">menu</a>
+				<a href="#main-menu-panel" id="button-1" class="ui-btn ui-icon-bars ui-btn-icon-right ui-corner-all" data-transition="slide" data-direction="reverse">menu</a>
 				<h1>Device Contacts</h1>
 			</div>
 			<div data-role="content">
